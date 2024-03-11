@@ -1,2 +1,2 @@
-# Demo
-all demo
+# Manual
+materials about R learning
