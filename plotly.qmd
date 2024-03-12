@@ -195,3 +195,191 @@ ggradar(radar1,grid.max = 250,values.radar = c("0", "125", "250"),)
 ```{r}
 #htmlwidgets::saveWidget(p,file = "filename.html")
 ```
+
+# bars&histograms
+
+```{r,message=FALSE}
+library(plotly)
+
+diamonds
+
+p1 <- plot_ly(diamonds, x = ~cut) %>% add_histogram()
+
+p2 <- diamonds %>%
+   dplyr::count(cut) %>%
+   plot_ly(x = ~cut, y = ~n) %>% 
+   add_bars()
+
+subplot(p1, p2) %>% hide_legend()
+```
+
+## facet
+
+```{r}
+one_plot <- function(d) {
+    plot_ly(d, x = ~price) %>%
+    add_annotations(
+             ~unique(clarity), x = 0.5, y = 1, 
+             xref = "paper", yref = "paper", showarrow = FALSE
+         )
+ }
+```
+
+```{r}
+diamonds %>%
+     split(.$clarity) %>%
+     lapply(one_plot) %>% 
+     subplot(nrows = 2, shareX = TRUE, titleX = FALSE) %>%
+     hide_legend()
+```
+
+```{r}
+
+plot_ly(diamonds, x = ~cut) %>% add_histogram()
+
+plot_ly(diamonds, x = ~cut, color = ~clarity) %>% add_histogram()
+```
+
+```{r,message=FALSE}
+library(tidyverse)
+data <- count(diamonds, cut, clarity)
+data_2 <- left_join(data, count(data, cut, wt=n, name='nn'), by ="cut")
+data_2
+data_2 %>%
+mutate(prop=n/nn) %>%
+plot_ly(x=~cut, y=~prop, color=~clarity) %>%
+add_bars() %>%
+layout(barmode="stack")
+```
+
+# box plot
+
+```{r}
+p <- plot_ly(iris,y=~Sepal.Length,boxpoints = "suspectedoutliers")
+p1 <- p %>% add_boxplot(x = "Overall")
+# 分类别观察
+p2 <- p %>% add_boxplot(x = ~Species)
+
+subplot(p1,p2)
+
+subplot(
+    p1, p2, shareY = TRUE,
+    widths = c(0.25, 0.75), margin = 0
+) %>% hide_legend()
+```
+
+```{r}
+# 观察在两个离散变量的分类下价格的箱线图
+# 设置clarity变量为不同颜色填充依据，以此进行各箱线图区分
+plot_ly(diamonds, x = ~price, y = ~interaction(clarity, cut)) %>%
+    add_boxplot(color = ~clarity) %>%
+    layout(yaxis = list(title = ""), margin = list(l = 100))
+```
+
+# pie chart
+
+```{r}
+data_1 <- data.frame(count(diamonds,cut))
+data_1
+
+plot_ly(data_1, labels = ~cut, values = ~n) %>% add_pie()
+```
+
+# area plot
+
+```{r,message=FALSE,warning=FALSE}
+wind
+
+plot_ly(wind, r = ~r, t = ~t) %>% add_area(color = ~nms)
+```
+
+```{r}
+density <- density(diamonds$carat)
+
+density
+
+plot_ly(x = ~density$x, y = ~density$y, type = 'scatter', mode = 'lines', fill = 'tozeroy') %>% 
+  layout(xaxis = list(title = 'Carat'),
+         yaxis = list(title = 'Density'))
+
+plot_ly(x = ~density$x, y = ~density$y) %>% 
+  #add_lines(fill = "tozeroy") %>% 
+  add_lines(fill = "blue") %>%
+  layout(xaxis = list(title = 'Carat'),
+         yaxis = list(title = 'Density'))
+```
+
+```{r}
+diamonds_Fair <- filter(diamonds,cut=='Fair')
+density_Fair <- density(diamonds_Fair$carat)
+diamonds_Ideal <- filter(diamonds,cut=='Ideal')
+density_Ideal <- density(diamonds_Ideal$carat)
+
+plot_ly(x = ~density_Fair$x, y = ~density_Fair$y, type = 'scatter', 
+ mode = 'lines', name = 'Fair cut', fill = 'tozeroy') %>%
+ add_trace(x = ~density_Ideal$x, y = ~density_Ideal$y, name = 'Ideal cut',
+ fill = 'tozeroy') %>%
+ layout(xaxis = list(title = 'Carat'),
+         yaxis = list(title = 'Density'))
+```
+
+```{r}
+plot_ly(x = ~density_Fair$x, y = ~density_Fair$y, type = 'scatter', 
+mode = 'lines', name = 'Fair cut', fill = 'tozeroy',
+fillcolor = 'rgba(168, 216, 234, 0.5)',line = list(width = 0.5)) %>%
+add_trace(x = ~density_Ideal$x, y = ~density_Ideal$y, name = 'Ideal cut',
+fill = 'tozeroy', fillcolor = 'rgba(255, 212, 96, 0.5)') %>% 
+layout(xaxis = list(title = 'Carat'),
+         yaxis = list(title = 'Density'))
+```
+
+```{r}
+uspexp <- t(USPersonalExpenditure)
+uspexp <- data.frame('year'=row.names(uspexp),uspexp)
+uspexp
+```
+
+```{r}
+plot_ly(uspexp, x = ~year, y = ~Food.and.Tobacco, 
+ name = 'Food and Tobacco', type = 'scatter', mode = 'none', 
+ fill = 'tozeroy', fillcolor = '#F5FF8D') %>% 
+  add_trace(y = ~Household.Operation, name = 'Household Operation', fillcolor = '#50CB86') %>% 
+  add_trace(y = ~Medical.and.Health, name = 'Medical and Health', fillcolor = '#4C74C9') %>% 
+  add_trace(y = ~Personal.Care, name = 'Personal Care', fillcolor = '#700961') %>% 
+  add_trace(y = ~Private.Education, name = 'Private Education', fillcolor = '#312F44') %>%
+  layout(title = 'United States Personal Expenditures by Categories',
+         xaxis = list(title = "",showgrid = FALSE),
+         yaxis = list(title = "Expenditures (in billions of dollars)",showgrid = FALSE))
+```
+
+```{r}
+uspexp <- t(USPersonalExpenditure)
+uspexp_2 <- uspexp/rowSums(uspexp)*100       
+uspexp_2 <- data.frame('year'=row.names(uspexp_2),uspexp_2)
+# 使用for循环，转换为累积表
+for (i in c(6:3)) {
+     uspexp_2[,i-1] <- uspexp_2[,i-1] + uspexp_2[,i]
+}
+uspexp_2
+
+plot_ly(uspexp_2, x = ~year, y = ~Food.and.Tobacco, name = 'Food and Tobacco', type = 'scatter', mode = 'none', fill = 'tozeroy', fillcolor = '#F5FF8D') %>%
+  add_trace(y = ~Household.Operation, name = 'Household Operation', fillcolor = '#50CB86') %>%
+  add_trace(y = ~Medical.and.Health, name = 'Medical and Health', fillcolor = '#4C74C9') %>%
+  add_trace(y = ~Personal.Care, name = 'Personal Care', fillcolor = '#700961') %>%
+  add_trace(y = ~Private.Education, name = 'Private Education', fillcolor = '#312F44') %>%
+  layout(title = 'United States Personal Expenditures by Categories',
+         xaxis = list(title = "",showgrid = FALSE),
+         yaxis = list(title = "Proportion from the Total Expenditures",
+                      showgrid = FALSE,ticksuffix = '%'))
+```
+
+# bubble plot
+
+```{r}
+head(iris)
+
+plot_ly(iris, x = ~Petal.Length, y = ~Sepal.Width, text = ~Species, type = 'scatter', mode = 'markers',marker = list(size = ~Petal.Width, opacity = 0.5, color = 'rgb(255, 65, 54)')) %>%
+  layout(title = 'petal length vs Sepal width',
+         xaxis = list(showgrid = FALSE),
+         yaxis = list(showgrid = FALSE))
+```
