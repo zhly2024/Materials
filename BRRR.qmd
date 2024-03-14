@@ -1,0 +1,69 @@
+---
+title: "BRRR"
+author: "zhly"
+date: "2024-01-02"
+categories: [r, package]
+format: html
+editor: visual
+---
+
+```{r}
+#devtools::install_github("brooke-watson/BRRR")
+library(BRRR)
+skrrrahh_list()
+```
+
+```{r,eval=FALSE}
+skrrrahh(sound = 1)
+skrrrahh(sound = 2)
+skrrrahh(sound = 3)
+skrrrahh(sound = 4)
+skrrrahh(sound = 5)
+skrrrahh(sound = 6)
+skrrrahh(sound = 7)
+skrrrahh(sound = 8)
+skrrrahh(sound = 9)
+skrrrahh(sound = 10)
+skrrrahh(sound = 11)
+skrrrahh(sound = 12)
+skrrrahh(sound = 13)
+skrrrahh(sound = 14)
+skrrrahh(sound = 15)
+skrrrahh(sound = 16)
+skrrrahh(sound = 17)
+skrrrahh(sound = 18)
+skrrrahh(sound = 19)
+skrrrahh(sound = 20)
+skrrrahh(sound = 21)
+skrrrahh(sound = 22)
+skrrrahh(sound = 23)
+skrrrahh(sound = 24)
+skrrrahh(sound = 25)
+skrrrahh(sound = 26)
+skrrrahh(sound = 27)
+skrrrahh(sound = 28)
+skrrrahh(sound = 29)
+skrrrahh(sound = 30)
+skrrrahh(sound = 31)
+skrrrahh(sound = 32)
+skrrrahh(sound = 33)
+skrrrahh(sound = 34)
+skrrrahh(sound = 35)
+skrrrahh(sound = 36)
+skrrrahh(sound = 37)
+skrrrahh(sound = 38)
+skrrrahh(sound = 39)
+skrrrahh(sound = 40)
+skrrrahh(sound = 41)
+skrrrahh(sound = 42)
+skrrrahh(sound = 43)
+skrrrahh(sound = 44)
+skrrrahh(sound = 45)
+skrrrahh(sound = 46)
+skrrrahh(sound = 47)
+skrrrahh(sound = 48)
+skrrrahh(sound = 49)
+skrrrahh(sound = 50)
+skrrrahh(sound = 51)
+skrrrahh(sound = 52)
+```

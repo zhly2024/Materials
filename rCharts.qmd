@@ -1,0 +1,16 @@
+---
+title: "rCharts"
+author: "zhly"
+date: "2024-01-02"
+categories: [r, code, visualization]
+format: html
+editor: visual
+description: "An interactive graphing library for R"
+---
+
+```{r}
+#remotes::install_github('ramnathv/rCharts')
+library(rCharts)
+```
+
+[learn more](https://github.com/ramnathv/rCharts)

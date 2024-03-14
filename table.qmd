@@ -1,0 +1,13 @@
+---
+title: "表格操作"
+author: "zhly"
+date: "2023-12-15"
+categories: [r, code, table, visualization]
+format: html
+editor: visual
+---
+
+```         
+```
+
+R中有很多package均可以对table进行个性化操作，完成类似定制时，不同package所用代码的复杂程度可能不同，所以学习时掌握各个package的主要函数和特征即可，使用时根据想要达到的目的选择合适的package、函数和具体参数设置完成操作即可，更多表格操作[请点击](https://bookdown.org/yihui/rmarkdown-cookbook/table-other.html)。

@@ -1,0 +1,69 @@
+---
+title: "cols4all学习"
+author: "zhly"
+date: "2023-12-15"
+categories: [r, code, 配色]
+format: html
+editor: visual
+---
+
+```{r setup, include=FALSE}
+library(cols4all)
+library(ggplot2)
+```
+
+# 调出GUI页面
+
+```{r}
+#调出GUI页面
+#c4a_gui()
+```
+
+Categorical（分类/离散型色板
+
+Sequential（渐变/顺序型色板）
+
+Diverging（渐变/发散型色板）
+
+Bivariate（多变量型色板）
+
+```{r}
+c4a_types()
+c4a_series()
+c4a_overview()
+c4a_palettes(type = "div", series = "hcl")
+```
+
+```{r}
+
+```
+
+# 提取配色
+
+```{r}
+#提取配色（色板名称+所需颜色数量）
+c4a("light", 8)
+c4a("hcl.purple_green", 11)
+c4a_na("hcl.purple_green") # get the associated color for missing values
+c4a_plot("hcl.purple_green", 11, include.na = TRUE)
+```
+
+# 案例
+
+```{r}
+data("diamonds")
+diam_exp = diamonds[diamonds$price >= 15000, ]
+ggplot(diam_exp, aes(x = carat, y = price, color = color)) +
+    geom_point(size = 2) +
+    scale_color_discrete_c4a_cat("carto.safe") +
+    theme_light()
+```
+
+```{r}
+ggplot(diam_exp, aes(x = carat, y = depth, color = price)) +
+    geom_point(size = 2) +
+    scale_color_continuous_c4a_div("wes.zissou1", mid = mean(diam_exp$price)) +
+    theme_light()
+```
+
+[更多详见](https://github.com/mtennekes/cols4all)

@@ -1,0 +1,112 @@
+---
+title: "echarts4r"
+author: "zhly"
+date: "2023-12-12"
+categories: [r, code, visualization]
+format: html
+editor: visual
+---
+
+```{r setup, include=FALSE}
+library(echarts4r)
+library(tidyverse)
+library(DT)
+```
+
+# **基本语法**
+
+## 基本语法
+
+编写数据用于分析
+
+```{r}
+data <- data.frame(
+  month = paste0(c(1:12), "月"),
+  Evaporation = sample(2:200, 12),
+  Precipitation = sample(2:200, 12),
+  Temperature = sample(2:25, 12, replace = TRUE)
+)
+DT::datatable(data)
+```
+
+```{r}
+# 形式一
+e_charts(data, month) |> # 横轴
+  e_bar(Evaporation) # 纵轴
+```
+
+```{r}
+# 形式二
+data |>
+  e_charts(month) |> # 横轴
+  e_bar(Evaporation) # 纵轴
+```
+
+## **横轴（e_x_axis）**
+
+```{r}
+data |>
+  e_charts(month) |> # 横轴
+  e_bar(Evaporation) |> # 纵轴
+  e_x_axis(
+    axisLabel = list(interval = 0, rotate = 30),
+    name = "X轴", # 坐标轴标题
+    nameLocation = "center", # 横坐标轴标题的位置
+    nameGap = 30
+  ) # 坐标轴标题与坐标轴之间的距离
+```
+
+## **纵轴（e_y_axis）**
+
+```{r}
+data |>
+  e_charts(month) |> # 横轴
+  e_bar(Evaporation) |> # 纵轴
+  e_y_axis(
+    min = 0, # 最小值
+    max = 200, # 最大值
+    interval = 50, # 显示间隔
+    name = "Y轴", # 坐标轴名称
+    formatter = "{value} ml"
+  ) # 坐标轴标签的格式化文本
+```
+
+## **多个变量**
+
+```{r}
+data |>
+  e_charts(month) |> # 横轴
+  e_bar(Evaporation) |> # 纵轴的第一个变量
+  e_bar(Precipitation) |> # 纵轴的第二个变量
+  e_line(Temperature) # 纵轴的第三个变量
+```
+
+## **双Y轴（y_index）**
+
+```{r}
+data |>
+  e_charts(month) |> # 横轴
+  e_bar(Evaporation, y_index = 0) |> # 指定主轴变量
+  e_bar(Precipitation, y_index = 0) |> # 指定主轴变量
+  e_line(Temperature, y_index = 1) |> # 指定副轴变量
+  e_y_axis(
+    y_index = 0, # 修改主Y轴属性
+    min = 0,
+    max = 200,
+    interval = 50,
+    name = "主Y轴",
+    formatter = "{value} ml"
+  ) |>
+  e_y_axis(
+    index = 1, # 修改副Y轴属性
+    min = 0,
+    max = 28,
+    interval = 7,
+    name = "副Y轴",
+    formatter = "{value}°C"
+  )
+```
+
+[learn more](https://github.com/JohnCoene/echarts4r)
+
+[echarts4r：从入门到应用](https://cosx.org/2021/12/introduction-to-echarts4r/)

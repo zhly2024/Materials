@@ -1,0 +1,60 @@
+---
+title: "corrplot"
+author: "zhly"
+date: "2024-01-05"
+categories: [r, package, viz]
+format: html
+editor: visual
+---
+
+```{r,message=FALSE}
+library(corrplot)
+```
+
+```{r}
+M = cor(mtcars)
+corrplot(M, method = 'number') # colorful number
+```
+
+```{r}
+corrplot(M, method = 'color', order = 'alphabet')
+```
+
+```{r}
+corrplot(M) # by default, method = 'circle'
+```
+
+```{r}
+corrplot(M, order = 'AOE') # after 'AOE' reorder
+```
+
+```{r}
+corrplot(M, method = 'shade', order = 'AOE', diag = FALSE)
+```
+
+```{r}
+corrplot(M, method = 'square', order = 'FPC', type = 'lower', diag = FALSE)
+```
+
+```{r}
+corrplot(M, method = 'ellipse', order = 'AOE', type = 'upper')
+```
+
+```{r}
+corrplot.mixed(M, order = 'AOE')
+```
+
+```{r}
+corrplot.mixed(M, lower = 'shade', upper = 'pie', order = 'hclust')
+```
+
+```{r}
+corrplot(M, order = 'hclust', addrect = 2)
+```
+
+```{r}
+corrplot(M, method = 'square', diag = FALSE, order = 'hclust',
+         addrect = 3, rect.col = 'blue', rect.lwd = 3, tl.pos = 'd')
+```
+
+[learn more](https://cran.r-project.org/web/packages/corrplot/vignettes/corrplot-intro.html)

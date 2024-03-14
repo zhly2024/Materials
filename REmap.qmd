@@ -1,0 +1,16 @@
+---
+title: "remapC"
+author: "zhly"
+date: "2024-01-02"
+categories: [r, code, visualization,map]
+format: html
+editor: visual
+---
+
+```{r}
+#devtools::install_github('lchiffon/REmap') 
+library(REmap)
+options(remap.ak="你的api")
+```
+
+仅作记录，方便以后查询

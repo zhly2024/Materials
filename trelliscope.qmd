@@ -1,0 +1,90 @@
+---
+title: "trelliscope"
+author: "zhly"
+date: "2024-01-09"
+categories: [r, code, visualization, 分面]
+format: html
+editor: visual
+---
+
+```{r,warning=FALSE,message=FALSE}
+library(tidyverse)
+library(trelliscope)
+```
+
+```{r}
+mars_rover
+class(mars_rover)
+```
+
+```{r}
+d <- as_trelliscope_df(mars_rover, name = "mars rover")
+d
+```
+
+```{r}
+show_info(d)
+```
+
+```{r}
+view_trelliscope(d)
+```
+
+```{r}
+gap
+```
+
+```{r}
+ggplot(gap, aes(year, life_exp)) +
+  geom_point() +
+  facet_wrap(vars(country, continent))
+```
+
+```{r}
+p <- ggplot(gap, aes(year, life_exp)) +
+  geom_point() +
+  facet_panels(vars(country, continent))
+```
+
+```{r}
+class(p)
+```
+
+```{r}
+p_df <- as_panels_df(p)
+
+p_df
+```
+
+```{r}
+p_df$panel[[2]]
+```
+
+```{r}
+tdf <- as_trelliscope_df(p_df,
+  name = "gapminder life expectancy")
+
+view_trelliscope(tdf)
+```
+
+```{r}
+tdf <- (
+  ggplot(gap, aes(year, life_exp)) +
+    geom_point() +
+    facet_panels(vars(country, continent, iso_alpha2))
+  ) |>
+  as_panels_df(panel_col = "lexp_time") |>
+  as_trelliscope_df(name = "gapminder life expectancy")
+
+tdf
+```
+
+```{r}
+flag_base_url <- "https://raw.githubusercontent.com/hafen/countryflags/master/png/512/"
+
+tdf <- mutate(tdf,
+  flag_url = panel_url(paste0(flag_base_url, iso_alpha2, ".png"))
+)
+
+tdf
+```

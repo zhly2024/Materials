@@ -1,0 +1,106 @@
+---
+title: "calendR"
+author: "zhly"
+date: "2024-01-02"
+categories: [r, code, visualization, calendR]
+format: html
+description: "Ready to print calendars with ggplot2"
+editor: visual
+---
+
+```{r,message=FALSE}
+library(calendR)
+Sys.setlocale("LC_TIME", "English")
+```
+
+```{r}
+calendR() # Defaults to the current year
+```
+
+```{r}
+calendR(year = 2020,           # Year
+        mbg.col = 2,           # Background color for the month names
+        months.col = "white",  # Text color of the month names
+        special.days = c(1, 50, 12, 125, 80,     # Color days of the year
+                         99, 102, 205, 266, 360),
+        special.col = "pink", # Color of the special.days
+        months.pos = 0.5)     # Horizontal alignment of the month names
+```
+
+```{r}
+calendR(year = 2028, month = 1)
+```
+
+```{r}
+calendR(month = 7, year = 2022, 
+        special.days = c(1, 5, 12, 28),       # Color days of the month
+        text = "Visit\nhttps://r-coder.com/", # Add some text
+        text.pos = c(1, 5, 12, 28))           # Where to add the text
+```
+
+```{r}
+calendR(from = "2020-09-01",  # Start date
+        to = "2021-05-31",    # End date
+        lty = 0,              # Line type
+        title = "2020-2021",  # Title
+        start = "M",          # Start on Mondays
+        months.pos = 0)       # Left-align month names
+```
+
+```{r}
+# calendR(month = 1, start = "S") # Week starts on Sunday (default)
+calendR(month = 1, start = "M")   # Week starts on Monday
+```
+
+```{r}
+calendR(year = 2021, ncol = 2) 
+```
+
+```{r}
+calendR(year = 2021, special.days = 1:365,
+        gradient = TRUE,        # Needed to create the heat map
+        special.col = rgb(1, 0, 0, alpha = 0.6), # Higher color
+        low.col = "white")                       # Lower color
+```
+
+```{r}
+calendR(month = 1,  
+        lunar = TRUE,         # Add moons to monthly calendar
+        lunar.col = "gray60", # Color of the non-visible area of the moon
+        lunar.size = 7)       # Size of the moons
+```
+
+```{r}
+calendR(year = 2022,                             # Year
+        mbg.col = 2,                             # Background color for the month names
+        months.col = "white",                    # Text color of the month names
+        special.days = c(1, 50, 12, 125, 80,     # Color days of the year
+                          99, 102, 205, 266, 359),
+        special.col = "pink",                    # Color of the special.days
+        months.pos = 0.5,                        # Center the month names
+        lty = 0,                                 # Line type
+        weeknames = c("Mo", "Tu", "We", "Th",    # Week names
+                      "Fr", "Sa","Su"), 
+        bg.col = "#f4f4f4",                      # Background color
+        title.size = 60,                         # Title size
+        orientation = "p")                       # Orientation
+```
+
+```{r}
+calendR(year = 2020,                        # Year
+        month = 10,                         # Month
+        title = "My calendar",              # Change the title
+        subtitle = "Have a nice day",       # Add a subtitle (or motivational phrase)
+        subtitle.col = 3,                   # Color of the subtitle
+        weeknames = c("S", "M", "T", "W",   # Change week day names
+                      "T", "F", "S"), 
+        bg.col = "white",                   # Background color
+        special.days = "weekend",           # Colorize the weekends (you can also set a vector of days)
+        special.col = rgb(0, 0, 1, 0.15),   # Color of the special days
+        text = "Running",                   # Add text (only for monthly calendars)
+        text.pos = c(7, 14, 25))            # Days of the month where to put the texts       
+
+
+```
+
+[learn more](https://github.com/R-CoderDotCom/calendR/)

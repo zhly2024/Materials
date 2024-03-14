@@ -1,0 +1,54 @@
+---
+title: "canvasXpress"
+author: "zhly"
+date: "2024-01-02"
+categories: [r, code, visualization]
+format: html
+editor: visual
+---
+
+```{r,message=FALSE}
+library(canvasXpress)
+library(tidyverse)
+```
+
+```{r,cache=TRUE}
+y <- read.table("https://www.canvasxpress.org/data/cX-irist-dat.txt", header=TRUE, sep="\t", 
+                quote="", row.names=1, fill=TRUE, check.names=FALSE, stringsAsFactors=FALSE)
+
+z <- read.table("https://www.canvasxpress.org/data/cX-irist-var.txt", header=TRUE, sep= "\t", 
+                quote="", row.names=1, fill=TRUE, check.names=FALSE, stringsAsFactors=FALSE)
+```
+
+```{r}
+canvasXpress(data      = y,
+             varAnnot  = z,
+             graphType ="Scatter3D",
+             colorBy   = "Species",
+             ellipseBy = "Species",
+             xAxis     = list("Sepal.Length"),
+             yAxis     = list("Petal.Width"),
+             zAxis     = list("Petal.Length"),
+             theme     = "CanvasXpress",
+             title     = "Iris Data Set",
+             axisTickScaleFontFactor  = 0.5,
+             axisTitleScaleFontFactor = 0.5)
+```
+
+```{r}
+canvasXpress(data              = y,
+             varAnnot          = z,
+             graphType         = "Scatter2D",
+             colorBy           = "Species",
+             layoutAdjust      = TRUE,
+             scatterPlotMatrix = TRUE,
+             theme             = "CanvasXpress")
+```
+
+continued
+
+[read more](https://canvasxpress.org/)
+
+[read more](https://github.com/neuhausi/canvasXpress/)
+
+需要系统学习

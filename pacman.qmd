@@ -1,0 +1,71 @@
+---
+title: "pacman"
+author: "zhly"
+date: "2023-12-12"
+categories: [r, code, package amanagement]
+format: html
+editor: visual
+---
+
+```{r setup, include=FALSE}
+library(pacman)
+```
+
+```{r}
+p_vignette("tidyverse")
+p_vignette("data.table")
+```
+
+```{r}
+p_author("tidyverse")
+p_author("pacman")
+```
+
+```{r}
+p_data("lattice")
+p_data(static=FALSE)
+```
+
+```{r}
+p_citation("tidyverse")
+```
+
+```{r}
+p_depends("tidyverse")
+```
+
+```{r}
+p_depends_reverse("tidyverse")
+```
+
+```{r}
+p_exists("tidyverse")
+```
+
+```{r}
+#p_help("tidyverse")
+```
+
+```{r}
+p_functions("tidyverse")
+```
+
+```{r}
+p_information("tidyverse")
+```
+
+```{r}
+p_news("tidyverse")
+```
+
+```{r}
+p_version("tidyverse")
+```
+
+```{r}
+p_loaded()
+```
+
+```{r}
+sessionInfo()
+```

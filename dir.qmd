@@ -1,0 +1,20 @@
+---
+title: "dir"
+author: "zhly"
+date: "2023-12-18"
+categories: [r, 文件夹操作]
+format: html
+editor: visual
+---
+
+仅为函数，具体操作查看文档
+
+```{r}
+#file.choose()
+#choose.files()
+#dir.create()
+#file.copy()
+#file.rename()
+#dir.exists()
+#unlink()
+```

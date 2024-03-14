@@ -1,0 +1,225 @@
+---
+title: "ComplexUpset"
+author: "zhly"
+date: "2024-01-02"
+categories: [r, code, visualization]
+format: html
+description: "A library for creating complex UpSet plots with ggplot2 geoms"
+editor: visual
+---
+
+```{r}
+library(ggplot2)
+library(ComplexUpset)
+```
+
+```{r}
+movies = as.data.frame(ggplot2movies::movies)
+head(movies, 3)
+genres = colnames(movies)[18:24]
+genres
+```
+
+```{r}
+movies[genres] = movies[genres] == 1
+t(head(movies[genres], 3))
+```
+
+```{r}
+movies[movies$mpaa == '', 'mpaa'] = NA
+movies = na.omit(movies)
+```
+
+```{r}
+set_size = function(w, h, factor=1.5) {
+    s = 1 * factor
+    options(
+        repr.plot.width=w * s,
+        repr.plot.height=h * s,
+        repr.plot.res=100 / factor,
+        jupyter.plot_mimetypes='image/png',
+        jupyter.plot_scale=1
+    )
+}
+```
+
+```{r}
+set_size(8, 3)
+upset(movies, genres, name='genre', width_ratio=0.1)
+```
+
+```{r}
+set_size(8, 3)
+(
+    upset(movies, genres, name='genre', width_ratio=0.1, min_size=10, wrap=TRUE, set_sizes=FALSE)
+    + ggtitle('Without empty groups (Short dropped)')
+    +    # adding plots is possible thanks to patchwork
+    upset(movies, genres, name='genre', width_ratio=0.1, min_size=10, keep_empty_groups=TRUE, wrap=TRUE, set_sizes=FALSE)
+    + ggtitle('With empty groups')
+)
+```
+
+```{r}
+set_size(8, 3)
+upset(
+    movies, genres, width_ratio=0.1,
+    min_degree=3,
+)
+```
+
+```{r}
+set_size(8, 3)
+upset(
+    movies, genres, width_ratio=0.1,
+    n_intersections=15
+)
+```
+
+```{r}
+abc_data = create_upset_abc_example()
+
+abc_venn = (
+    ggplot(arrange_venn(abc_data))
+    + coord_fixed()
+    + theme_void()
+    + scale_color_venn_mix(abc_data)
+)
+
+(
+    abc_venn
+    + geom_venn_region(data=abc_data, alpha=0.05)
+    + geom_point(aes(x=x, y=y, color=region), size=1)
+    + geom_venn_circle(abc_data)
+    + geom_venn_label_set(abc_data, aes(label=region))
+    + geom_venn_label_region(
+        abc_data, aes(label=size),
+        outwards_adjust=1.75,
+        position=position_nudge(y=0.2)
+    )
+    + scale_fill_venn_mix(abc_data, guide='none')
+)
+```
+
+```{r}
+set_size(6, 6.5)
+simple_venn = (
+    abc_venn
+    + geom_venn_region(data=abc_data, alpha=0.3)
+    + geom_point(aes(x=x, y=y), size=0.75, alpha=0.3)
+    + geom_venn_circle(abc_data)
+    + geom_venn_label_set(abc_data, aes(label=region), outwards_adjust=2.55)
+)
+highlight = function(regions) scale_fill_venn_mix(
+    abc_data, guide='none', highlight=regions, inactive_color='NA'
+)
+
+(
+    (
+        simple_venn + highlight(c('A-B')) + labs(title='Exclusive intersection of A and B')
+        | simple_venn + highlight(c('A-B', 'A-B-C')) + labs(title='Inclusive intersection of A and B')
+    ) /
+    (
+        simple_venn + highlight(c('A-B', 'A', 'B')) + labs(title='Exclusive union of A and B')
+        | simple_venn + highlight(c('A-B', 'A-B-C', 'A', 'B', 'A-C', 'B-C')) + labs(title='Inclusive union of A and B')
+    )
+)
+```
+
+```{r}
+set_size(8, 4.5)
+abc_upset = function(mode) upset(
+    abc_data, c('A', 'B', 'C'), mode=mode, set_sizes=FALSE,
+    encode_sets=FALSE,
+    queries=list(upset_query(intersect=c('A', 'B'), color='orange')),
+    base_annotations=list(
+        'Size'=(
+            intersection_size(
+                mode=mode,
+                mapping=aes(fill=exclusive_intersection),
+                size=0,
+                text=list(check_overlap=TRUE)
+            ) + scale_fill_venn_mix(
+                data=abc_data,
+                guide='none',
+                colors=c('A'='red', 'B'='blue', 'C'='green3')
+            )
+        )
+    )
+)
+
+(
+    (abc_upset('exclusive_intersection') | abc_upset('inclusive_intersection'))
+    /
+    (abc_upset('exclusive_union') | abc_upset('inclusive_union'))
+)
+```
+
+```{r}
+set_size(8, 3)
+upset(
+    movies, genres,
+    width_ratio=0.1,
+    min_size=10,
+    mode='inclusive_union',
+    base_annotations=list('Size'=(intersection_size(counts=FALSE, mode='inclusive_union'))),
+    intersections='all',
+    max_degree=3
+)
+```
+
+```{r}
+set_size(8, 8)
+
+set.seed(0)   # keep the same jitter for identical plots
+
+upset(
+    movies,
+    genres,
+    annotations = list(
+        # 1st method - passing list:
+        'Length'=list(
+            aes=aes(x=intersection, y=length),
+            # provide a list if you wish to add several geoms
+            geom=geom_boxplot(na.rm=TRUE)
+        ),
+        # 2nd method - using ggplot
+        'Rating'=(
+            # note that aes(x=intersection) is supplied by default and can be skipped
+            ggplot(mapping=aes(y=rating))
+            # checkout ggbeeswarm::geom_quasirandom for better results!
+            + geom_jitter(aes(color=log10(votes)), na.rm=TRUE)
+            + geom_violin(alpha=0.5, na.rm=TRUE)
+        ),
+        # 3rd method - using `upset_annotate` shorthand
+        'Budget'=upset_annotate('budget', geom_boxplot(na.rm=TRUE))
+    ),
+    min_size=10,
+    width_ratio=0.1
+)
+```
+
+```{r}
+set_size(8, 5)
+
+upset(
+    movies,
+    genres,
+    annotations = list(
+        'MPAA Rating'=(
+            ggplot(mapping=aes(fill=mpaa))
+            + geom_bar(stat='count', position='fill')
+            + scale_y_continuous(labels=scales::percent_format())
+            + scale_fill_manual(values=c(
+                'R'='#E41A1C', 'PG'='#377EB8',
+                'PG-13'='#4DAF4A', 'NC-17'='#FF7F00'
+            ))
+            + ylab('MPAA Rating')
+        )
+    ),
+    width_ratio=0.1
+)
+```
+
+continued
+
+[learn more](https://krassowski.github.io/complex-upset/index.html)

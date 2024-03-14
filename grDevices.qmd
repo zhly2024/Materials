@@ -1,0 +1,32 @@
+---
+title: "grDevices"
+author: "zhly"
+date: "2024-01-02"
+categories: [r, code, visualization, 字体设置]
+format: html
+editor: visual
+---
+
+```{r,message=FALSE}
+library(grDevices)
+library(tidyverse)
+```
+
+```{r}
+fig1 <- ggplot(mpg,aes(factor(class),hwy, fill=class)) +
+ geom_boxplot()+
+ theme(legend.position="none",
+       axis.text = element_text(size=15),
+       axis.title = element_text(size=15)) +
+ xlab("")
+fig1
+```
+
+```{r}
+windowsFonts(A=windowsFont("Times New Roman"),
+            B=windowsFont("Arial"))
+```
+
+```{r}
+fig1+theme(text = element_text(family = "A",face = "bold"))
+```

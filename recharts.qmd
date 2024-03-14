@@ -1,0 +1,119 @@
+---
+title: "recharts"
+author: "zhly"
+date: "2024-01-02"
+categories: [r, code, visualization]
+format: html
+editor: visual
+---
+
+```{r,message=FALSE}
+# remotes::install_github("madlogos/recharts")
+library(recharts)
+```
+
+```{r}
+head(mtcars)
+echartr(mtcars, wt, mpg)
+echartr(mtcars, wt, mpg, am, weight=gear, type='bubble')
+```
+
+```{r}
+#先改造一下数据集
+d <- data.table::dcast(mtcars, carb+gear~., mean, value.var='mpg')
+names(d)[3] <- 'mean.mpg'
+d$carb <- as.character(d$carb)
+#柱状图和折线图混合
+echartr(d, carb, "mean.mpg", gear, type=c('vbar', 'vbar', 'line')) %>% 
+  setSymbols('emptycircle')
+```
+
+```{r}
+##创建一个数据集
+d1 <- data.frame(x=rep(LETTERS[1:6], 4), y=abs(rnorm(24)), 
+                 f=c(rep('i', 12), rep('ii', 12)), 
+                 s=rep(c(rep('I', 6), rep('II', 6)), 2))
+echartr(d1, x, y, s, facet=f, type='radar', 
+        subtype=list(c('fill', ''), c('', 'fill')))
+```
+
+```{r}
+
+#通过list去构建数据集
+chordEx1 = list(
+  title = list(
+    text = '测试数据',
+    subtext = 'From d3.js',
+    x = 'right',
+    y = 'bottom'
+  ),
+  tooltip = list(
+    trigger = 'item',
+    formatter = JS('function(params) {
+      if (params.indicator2) { // is edge
+        return params.value.weight;
+      } else {// is node
+        return params.name
+      }
+    }')
+  ),
+  toolbox = list(
+    show = TRUE,
+    feature = list(
+      restore = list(show = TRUE),
+      magicType = list(show = TRUE, type = c('force', 'chord')),
+      saveAsImage = list(show = TRUE)
+    )
+  ),
+  legend = list(
+    x = 'left',
+    data = c('group1', 'group2', 'group3', 'group4')
+  ),
+  series = list(
+    list(
+      type = 'chord',
+      sort = 'ascending',
+      sortSub = 'descending',
+      showScale = TRUE,
+      showScaleText = TRUE,
+      data = list(
+        list(name = 'group1'),
+        list(name = 'group2'),
+        list(name = 'group3'),
+        list(name = 'group4')
+      ),
+      itemStyle = list(
+        normal = list(
+          label = list(show = FALSE)
+        )
+      ),
+      matrix = rbind(
+        c(11975,  5871, 8916, 2868),
+        c( 1951, 10048, 2060, 6171),
+        c( 8010, 16145, 8090, 8045),
+        c( 1013,   990,  940, 6907)
+      )
+    )
+  )
+)
+
+echart(chordEx1)
+```
+
+```{r}
+
+str(Titanic)
+# 表格按行求和，再进行转换长表达
+titanic <- data.table::melt(apply(Titanic, c(1,4), sum))
+# 定义列名
+names(titanic) <- c('Class', 'Survived', 'Count')
+# knitr格式化表达
+knitr::kable(titanic)
+echartr(titanic, Class, Count, facet=Survived, type='rose', subtype='radius')
+```
+
+continued
+
+[recharts](https://github.com/cosname/recharts) [read more](https://recharts.cosx.org/)
+
+草率的案例，建议以后系统学习

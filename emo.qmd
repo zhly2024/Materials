@@ -1,0 +1,34 @@
+---
+title: "emo"
+author: "zhly"
+date: "2024-01-02"
+categories: [r, package]
+format: html
+description: "Easily insert emoji into R and RMarkdown"
+editor: visual
+---
+
+```{r}
+# install.packages("devtools")
+#devtools::install_github("hadley/emo")
+library(emo)
+```
+
+```{r}
+emo::ji("poop")
+emo::ji("face")
+emo::ji("face")
+emo::ji("face")
+emo::ji("american")
+emo::ji("amusement park")
+```
+
+可以这样`r emo::ji("smile")`
+
+还可以这样`r emo::ji("cry")`
+
+又可以这样`r emo::ji("4")`
+
+Very Interesting
+
+[learn more](https://github.com/hadley/emo)

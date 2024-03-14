@@ -1,0 +1,43 @@
+---
+title: "extrafont"
+author: "zhly"
+date: "2024-01-02"
+categories: [r, code, visualization, 字体设置]
+format: html
+description: "fonts setting"
+editor: visual
+---
+
+```{r,message=FALSE}
+library(extrafont)
+library(ggplot2)
+```
+
+```{r,warning=FALSE}
+#pdf("font_plot.pdf", family="Impact", width=4, height=4)
+plot(mtcars$mpg, mtcars$wt, 
+     main = "Fuel Efficiency of 32 Cars",
+     xlab = "Weight (x1000 lb)",
+     ylab = "Miles per Gallon")
+#dev.off()
+```
+
+```{r}
+ggplot(mtcars, aes(x=wt, y=mpg)) + geom_point() +
+  ggtitle("Fuel Efficiency of 32 Cars") +
+  xlab("Weight (x1000 lb)") + ylab("Miles per Gallon") +
+  theme(text=element_text(size=16, family="Impact"))
+```
+
+```{r}
+# Register fonts for Windows bitmap output
+#loadfonts(device="win")
+```
+
+```{r}
+ggplot(mtcars, aes(x=wt, y=mpg)) + geom_point() +
+  ggtitle("Title text goes here") +
+  theme(plot.title = element_text(size = 16, family="Georgia", face="italic"))
+```
+
+[learn more](https://github.com/wch/extrafont)

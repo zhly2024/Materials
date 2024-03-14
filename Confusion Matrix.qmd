@@ -1,0 +1,83 @@
+---
+title: "Confusion Matrix"
+author: "zhly"
+date: "2024-01-02"
+categories: [r, code, visualization]
+format: html
+editor: visual
+---
+
+混淆矩阵，两种用途：
+
+-   群体遗传学模型中self-attribution可视化
+
+-   机器学习算法可视化
+
+```{r,message=FALSE}
+library(cvms)
+library(tidyverse)
+```
+
+```{r}
+set.seed(123)
+mydata <- data.frame(
+  reference = rbinom(100, 1, 0.65),
+  prediction = rbinom(100, 1, 0.55)
+)
+
+head(mydata, 10)
+```
+
+```{r}
+mytable <- table(mydata)
+mytable
+```
+
+```{r}
+mytibble <- as_tibble(mytable)
+mytibble
+```
+
+```{r}
+plot_confusion_matrix(mytibble,
+                      target_col = "reference",
+                      prediction_col = "prediction",
+                      counts_col = "n")
+```
+
+```{r}
+set.seed(12)
+mydata1 <- data.frame(
+  reference = floor(runif(200)*4),
+  prediction = floor(runif(200)*4)
+)
+
+head(mydata1)
+```
+
+```{r}
+mytibble1<- as_tibble(table(mydata1))
+mytibble1
+
+plot_confusion_matrix(mytibble1,
+                      target_col = "reference",
+                      prediction_col = "prediction",
+                      counts_col = "n")
+```
+
+```{r}
+plot_confusion_matrix(mytibble1,
+                      target_col = "reference",
+                      prediction_col = "prediction",
+                      counts_col = "n",
+                      add_sums = TRUE)
+```
+
+```{r}
+plot_confusion_matrix(mytibble1,
+                      target_col = "reference",
+                      prediction_col = "prediction",
+                      counts_col = "n",
+                      add_sums = TRUE,
+                      palette = "Purples")
+```

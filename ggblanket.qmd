@@ -1,0 +1,79 @@
+---
+title: "ggblanket"
+author: "zhly"
+date: "2024-01-02"
+categories: [r, code, visualization]
+format: html
+editor: visual
+description: "simplify ggplot plot"
+---
+
+```{r,message=FALSE}
+library(ggblanket)
+library(dplyr)
+library(ggblanket)
+library(palmerpenguins)
+library(patchwork)
+library(pals)
+library(tidyverse)
+```
+
+```{r,message=FALSE}
+penguins |>
+  tidyr::drop_na(sex) |> 
+  mutate(sex = stringr::str_to_sentence(sex)) |>
+  gg_histogram(
+    x = flipper_length_mm,
+    col = sex,
+    facet = species)
+```
+
+```{r,message=FALSE,cache=TRUE}
+p1 <- gg_point(data = iris,
+               x = Sepal.Width,
+               y = Sepal.Length,
+               col = Species)
+
+p2 <- gg_bar(data = iris,
+             x = Species,
+             y = Sepal.Length,
+             col = Species,
+             stat = "identity",
+             pal = brewer.dark2(3))
+
+p3 <- gg_histogram(data = iris,
+                   x = Sepal.Length,
+                   col = Species,
+                   col_title = "Species of Iris",
+                   y_breaks = scales::breaks_width(1))
+
+p4 <- gg_density(data = iris,
+                 x = Sepal.Length,
+                 col = Species,
+                 col_title = "Species of Iris")
+
+p5 <- gg_violin(iris,
+                x = Species,
+                y = Sepal.Length,
+                y_include = c(3, 9), # y轴范围
+                pal = brewer.dark2(3))
+
+p6 <- gg_jitter(iris,
+                x = Species,
+                y = Sepal.Length,
+                col = Species,
+                y_title = "Length of Sepal",
+                x_title = "Species of iris",
+                position = position_jitter(width = 0.2, height = 0, seed = 123),
+                pal = brewer.dark2(3))
+p1
+p2
+p3
+p4
+p5
+p6
+
+(p1+p2)/(p3+p4)/(p5+p6)
+```
+
+[learn more](https://davidhodge931.github.io/ggblanket/articles/ggblanket.html)

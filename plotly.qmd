@@ -1,385 +1,77 @@
 ---
 title: "plotly"
-author: "zly"
-date: 2024-03-12
+author: "zhly"
+date: "2024-01-02"
+categories: [r, code, visualization]
 format: html
 editor: visual
-toc: true
+description: "An interactive graphing library for R"
 ---
 
-# scatter plot
-
 ```{r,message=FALSE}
 library(plotly)
-plot_ly(data = iris,x = ~Sepal.Length,y = ~Petal.Length, color = ~ Species,symbol = ~ Species,type = "scatter",mode = "markers")
 ```
 
-# line
+# Web-based ggplot2 graphics
 
 ```{r}
-trace_0 = rnorm(50, mean = 5)
-trace_1 = rnorm(50, mean = 0)
-trace_2 = rnorm(50, mean = -5)
-x = c(1:50)
-data = data.frame(x, trace_0, trace_1, trace_2)
-
-plot_ly(data = data,x = ~x,y = ~trace_1, type = "scatter",mode = "lines")
-
-plot_ly(data = data,x = ~x,y = ~trace_1) %>% add_trace(type = "scatter",mode = "lines+markers")
-
-plot_ly(data = data,x = ~x,y = ~trace_1,showlegend = F) %>%
-add_trace(type = "scatter",mode = "markers") %>% 
-add_trace(type = "scatter",mode = "lines")
-```
-
-```{r}
-plot_ly()
-```
-
-# bar plot
-
-```{r,message=FALSE}
-library(tidyverse)
-iris1 <- iris %>% count(Species)
-
-plot_ly(iris1,x = ~Species,y = ~ n,type = "bar")
-
-plot_ly(iris1,x = ~Species,y = ~ n) %>% 
-  add_bars(marker = list(color = "#FFC125",opacity = 0.5, line = list(color = "#228B22",width = 2)))
-
-
-
-plot_ly(iris1,y = ~Species,x = ~ n,type = "bar")
-```
-
-# histgram
-
-```{r}
-plot_ly(x = ~rnorm(50),type = "histogram")
-```
-
-```{r}
-plot_ly(y = ~rnorm(50)) %>% 
-  add_histogram()
-```
-
-```{r}
-plot_ly(alpha = 0.5) %>% add_histogram(x = ~rnorm(50)) %>%
-add_histogram(x = ~rnorm(50)+1) %>% layout(barmode = "overlay")
-```
-
-```{r}
-plot_ly(alpha = 0.5) %>% add_histogram(x = ~rnorm(50)) %>%
-add_histogram(x = ~rnorm(50)+1) %>% layout(barmode = "stack")
-```
-
-# pie chart
-
-```{r}
-pie = data.frame("Categorie" = rownames(USPersonalExpenditure), USPersonalExpenditure)
-
-plot_ly(pie,labels = ~Categorie,values = ~X1945) %>% 
-  add_pie()
-
-plot_ly(pie,labels = ~Categorie,values = ~X1945) %>% 
-  add_pie(hole = 0.4)
-```
-
-# box plot
-
-```{r}
-plot_ly(iris, x = ~ Sepal.Length) %>% 
-  add_boxplot()
-
-plot_ly(iris, y = ~ Sepal.Length, type = "box") 
-```
-
-```{r}
-plot_ly(iris,y = ~Sepal.Length,color = ~Species) %>% 
-  add_boxplot()
-```
-
-# violin plot
-
-```{r}
-plot_ly(iris,y = ~Sepal.Length,color = ~Species,type = "violin") 
-
-plot_ly(iris,y = ~Sepal.Length,color = ~Species) %>% 
-  add_trace(type = "violin")
-```
-
-# heatmap
-
-```{r}
-m = matrix(rnorm(9),nrow = 3,ncol = 3)
-plot_ly(x = c("a","b","c"),y = c("d","e","f"),z = m,type = "heatmap")
-```
-
-# radar plot
-
-```{r}
-mydata<- data.frame(
-  parameters = c("Peak Amplitude", "Peak Count", "Peak Rate",
-                 "Peak Spacing", "Peak Width 50%", "Peak Width 90%",
-                 "Peak Rise Time", "Peak Decay Time",
-                 "Rise Slope", "Decay Slope"),
-  Wt_DMSO = rep(100, 10),
-  APOE_DMSO = c(127.07127, 54.20589, 53.3881, 200.15486, 174.3263,
-                148.8633, 136.1452, 116.2678, 103.59806, 116.50617),
-  ten_uM_Donepezil = c(75.49221, 141.10778, 146.3203, 64.33077, 157.0577,
-                       116.4687, 129.5369, 101.4318, 56.01559, 77.95287))
-
-plot_ly(
-  type = "scatterpolar",
-  fill = "toself",
-  mode = "lines") %>% 
-  add_trace(
-    r = mydata$Wt_DMSO,
-    theta = mydata$parameters,
-    name = "Wt_DMSO",
-    fillcolor = rgb(8, 9, 9, 50, maxColorValue = 255),
-    line = list(color = rgb(8, 9, 9, maxColorValue = 255), width = 1.5)
-    ) %>%
-  add_trace(
-    r = mydata$APOE_DMSO,
-    theta = mydata$parameters,
-    name = "APOE_DMSO",
-    fillcolor = rgb(255, 135, 135, 200, maxColorValue = 255),
-    line = list(color = rgb(255, 135, 135, 200, maxColorValue = 255), width = 1)
-  ) %>%
-  add_trace(
-    r = mydata$ten_uM_Donepezil,
-    theta = mydata$parameters,
-    name = "10 uM Donepezil",
-    fillcolor = rgb(166, 197, 193, 150, maxColorValue = 255),
-    line = list(color = rgb(166, 197, 193, 150, maxColorValue = 255),
-                width = 1)
-  ) %>%
-  layout(
-    polar = list(
-      radialaxis = list(
-        visible = TRUE,
-        range = c(0,300),
-        tickvals = seq(0, 300, 50),
-        tickangle = 90)),
-    legend = list(
-      orientation = "v",
-      x = 0.4,
-      y = - 0.2))
-
-library(tidyverse)
-library(ggradar)
-library(scales)
-mtcars_radar <- mtcars %>%
-  as_tibble(rownames = "group") %>%
-  mutate_at(vars(-group), rescale) %>%
-  tail(4) %>%
-  select(1:10)
-mtcars_radar
-ggradar(mtcars_radar)
-
-
-radar <- as.data.frame(t(mydata[,2:4]))
-column_names <- mydata$parameters
-group <- row.names(radar)
-names(radar) <- column_names
-radar1 <- radar %>% 
-  mutate(group=group) %>% 
-  select(group,everything())
-
-ggradar(radar1,grid.max = 250,values.radar = c("0", "125", "250"),)
-```
-
-# save
-
-```{r}
-#htmlwidgets::saveWidget(p,file = "filename.html")
-```
-
-# bars&histograms
-
-```{r,message=FALSE}
 library(plotly)
-
-diamonds
-
-p1 <- plot_ly(diamonds, x = ~cut) %>% add_histogram()
-
-p2 <- diamonds %>%
-   dplyr::count(cut) %>%
-   plot_ly(x = ~cut, y = ~n) %>% 
-   add_bars()
-
-subplot(p1, p2) %>% hide_legend()
-```
-
-## facet
-
-```{r}
-one_plot <- function(d) {
-    plot_ly(d, x = ~price) %>%
-    add_annotations(
-             ~unique(clarity), x = 0.5, y = 1, 
-             xref = "paper", yref = "paper", showarrow = FALSE
-         )
- }
+g <- ggplot(faithful, aes(x = eruptions, y = waiting)) +
+  stat_density_2d(aes(fill = ..level..), geom = "polygon") + 
+  xlim(1, 6) + ylim(40, 100)
+ggplotly(g)
 ```
 
 ```{r}
-diamonds %>%
-     split(.$clarity) %>%
-     lapply(one_plot) %>% 
-     subplot(nrows = 2, shareX = TRUE, titleX = FALSE) %>%
-     hide_legend()
+gg <- ggplotly(g, dynamicTicks = "y")
+style(gg, hoveron = "points", hoverinfo = "x+y+text", hoverlabel = list(bgcolor = "white"))
+```
+
+# Using plotly without ggplot2
+
+```{r}
+plot_ly(z = ~volcano, type = "surface")
 ```
 
 ```{r}
+fig <- plot_ly(data = iris, x = ~Sepal.Length, y = ~Petal.Length)
 
-plot_ly(diamonds, x = ~cut) %>% add_histogram()
-
-plot_ly(diamonds, x = ~cut, color = ~clarity) %>% add_histogram()
-```
-
-```{r,message=FALSE}
-library(tidyverse)
-data <- count(diamonds, cut, clarity)
-data_2 <- left_join(data, count(data, cut, wt=n, name='nn'), by ="cut")
-data_2
-data_2 %>%
-mutate(prop=n/nn) %>%
-plot_ly(x=~cut, y=~prop, color=~clarity) %>%
-add_bars() %>%
-layout(barmode="stack")
-```
-
-# box plot
-
-```{r}
-p <- plot_ly(iris,y=~Sepal.Length,boxpoints = "suspectedoutliers")
-p1 <- p %>% add_boxplot(x = "Overall")
-# 分类别观察
-p2 <- p %>% add_boxplot(x = ~Species)
-
-subplot(p1,p2)
-
-subplot(
-    p1, p2, shareY = TRUE,
-    widths = c(0.25, 0.75), margin = 0
-) %>% hide_legend()
+fig
 ```
 
 ```{r}
-# 观察在两个离散变量的分类下价格的箱线图
-# 设置clarity变量为不同颜色填充依据，以此进行各箱线图区分
-plot_ly(diamonds, x = ~price, y = ~interaction(clarity, cut)) %>%
-    add_boxplot(color = ~clarity) %>%
-    layout(yaxis = list(title = ""), margin = list(l = 100))
-```
+fig <- plot_ly(data = iris, x = ~Sepal.Length, y = ~Petal.Length,
+               marker = list(size = 10,
+                             color = 'rgba(255, 182, 193, .9)',
+                             line = list(color = 'rgba(152, 0, 0, .8)',
+                                         width = 2)))
+fig <- fig %>% layout(title = 'Styled Scatter',
+         yaxis = list(zeroline = FALSE),
+         xaxis = list(zeroline = FALSE))
 
-# pie chart
-
-```{r}
-data_1 <- data.frame(count(diamonds,cut))
-data_1
-
-plot_ly(data_1, labels = ~cut, values = ~n) %>% add_pie()
-```
-
-# area plot
-
-```{r,message=FALSE,warning=FALSE}
-wind
-
-plot_ly(wind, r = ~r, t = ~t) %>% add_area(color = ~nms)
+fig
 ```
 
 ```{r}
-density <- density(diamonds$carat)
+trace_0 <- rnorm(100, mean = 5)
+trace_1 <- rnorm(100, mean = 0)
+trace_2 <- rnorm(100, mean = -5)
+x <- c(1:100)
 
-density
+data <- data.frame(x, trace_0, trace_1, trace_2)
 
-plot_ly(x = ~density$x, y = ~density$y, type = 'scatter', mode = 'lines', fill = 'tozeroy') %>% 
-  layout(xaxis = list(title = 'Carat'),
-         yaxis = list(title = 'Density'))
+fig <- plot_ly(data, x = ~x)
+fig <- fig %>% add_trace(y = ~trace_0, name = 'trace 0',mode = 'lines')
+fig <- fig %>% add_trace(y = ~trace_1, name = 'trace 1', mode = 'lines+markers')
+fig <- fig %>% add_trace(y = ~trace_2, name = 'trace 2', mode = 'markers')
 
-plot_ly(x = ~density$x, y = ~density$y) %>% 
-  #add_lines(fill = "tozeroy") %>% 
-  add_lines(fill = "blue") %>%
-  layout(xaxis = list(title = 'Carat'),
-         yaxis = list(title = 'Density'))
+fig
 ```
 
-```{r}
-diamonds_Fair <- filter(diamonds,cut=='Fair')
-density_Fair <- density(diamonds_Fair$carat)
-diamonds_Ideal <- filter(diamonds,cut=='Ideal')
-density_Ideal <- density(diamonds_Ideal$carat)
+continued
 
-plot_ly(x = ~density_Fair$x, y = ~density_Fair$y, type = 'scatter', 
- mode = 'lines', name = 'Fair cut', fill = 'tozeroy') %>%
- add_trace(x = ~density_Ideal$x, y = ~density_Ideal$y, name = 'Ideal cut',
- fill = 'tozeroy') %>%
- layout(xaxis = list(title = 'Carat'),
-         yaxis = list(title = 'Density'))
-```
+[Interactive web-based data visualization with R, plotly, and shiny](https://plotly-r.com/)
 
-```{r}
-plot_ly(x = ~density_Fair$x, y = ~density_Fair$y, type = 'scatter', 
-mode = 'lines', name = 'Fair cut', fill = 'tozeroy',
-fillcolor = 'rgba(168, 216, 234, 0.5)',line = list(width = 0.5)) %>%
-add_trace(x = ~density_Ideal$x, y = ~density_Ideal$y, name = 'Ideal cut',
-fill = 'tozeroy', fillcolor = 'rgba(255, 212, 96, 0.5)') %>% 
-layout(xaxis = list(title = 'Carat'),
-         yaxis = list(title = 'Density'))
-```
+[learn more](https://github.com/plotly/plotly.R)
 
-```{r}
-uspexp <- t(USPersonalExpenditure)
-uspexp <- data.frame('year'=row.names(uspexp),uspexp)
-uspexp
-```
-
-```{r}
-plot_ly(uspexp, x = ~year, y = ~Food.and.Tobacco, 
- name = 'Food and Tobacco', type = 'scatter', mode = 'none', 
- fill = 'tozeroy', fillcolor = '#F5FF8D') %>% 
-  add_trace(y = ~Household.Operation, name = 'Household Operation', fillcolor = '#50CB86') %>% 
-  add_trace(y = ~Medical.and.Health, name = 'Medical and Health', fillcolor = '#4C74C9') %>% 
-  add_trace(y = ~Personal.Care, name = 'Personal Care', fillcolor = '#700961') %>% 
-  add_trace(y = ~Private.Education, name = 'Private Education', fillcolor = '#312F44') %>%
-  layout(title = 'United States Personal Expenditures by Categories',
-         xaxis = list(title = "",showgrid = FALSE),
-         yaxis = list(title = "Expenditures (in billions of dollars)",showgrid = FALSE))
-```
-
-```{r}
-uspexp <- t(USPersonalExpenditure)
-uspexp_2 <- uspexp/rowSums(uspexp)*100       
-uspexp_2 <- data.frame('year'=row.names(uspexp_2),uspexp_2)
-# 使用for循环，转换为累积表
-for (i in c(6:3)) {
-     uspexp_2[,i-1] <- uspexp_2[,i-1] + uspexp_2[,i]
-}
-uspexp_2
-
-plot_ly(uspexp_2, x = ~year, y = ~Food.and.Tobacco, name = 'Food and Tobacco', type = 'scatter', mode = 'none', fill = 'tozeroy', fillcolor = '#F5FF8D') %>%
-  add_trace(y = ~Household.Operation, name = 'Household Operation', fillcolor = '#50CB86') %>%
-  add_trace(y = ~Medical.and.Health, name = 'Medical and Health', fillcolor = '#4C74C9') %>%
-  add_trace(y = ~Personal.Care, name = 'Personal Care', fillcolor = '#700961') %>%
-  add_trace(y = ~Private.Education, name = 'Private Education', fillcolor = '#312F44') %>%
-  layout(title = 'United States Personal Expenditures by Categories',
-         xaxis = list(title = "",showgrid = FALSE),
-         yaxis = list(title = "Proportion from the Total Expenditures",
-                      showgrid = FALSE,ticksuffix = '%'))
-```
-
-# bubble plot
-
-```{r}
-head(iris)
-
-plot_ly(iris, x = ~Petal.Length, y = ~Sepal.Width, text = ~Species, type = 'scatter', mode = 'markers',marker = list(size = ~Petal.Width, opacity = 0.5, color = 'rgb(255, 65, 54)')) %>%
-  layout(title = 'petal length vs Sepal width',
-         xaxis = list(showgrid = FALSE),
-         yaxis = list(showgrid = FALSE))
-```
+[learn more](https://plotly.com/r/basic-charts/)

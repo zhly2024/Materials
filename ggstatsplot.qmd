@@ -1,0 +1,102 @@
+---
+title: "ggstatsplot"
+author: "zhly"
+date: "2024-01-02"
+categories: [r, code, visualization]
+format: html
+editor: visual
+---
+
+```{r}
+library(ggstatsplot)
+```
+
+```{r}
+set.seed(123)
+
+ggbetweenstats(
+  data  = iris,
+  x     = Species,
+  y     = Sepal.Length,
+  title = "Distribution of sepal length across Iris species"
+)
+```
+
+```{r}
+set.seed(123)
+
+grouped_ggbetweenstats(
+  data             = dplyr::filter(movies_long, genre %in% c("Action", "Comedy")),
+  x                = mpaa,
+  y                = length,
+  grouping.var     = genre,
+  ggsignif.args    = list(textsize = 4, tip_length = 0.01),
+  p.adjust.method  = "bonferroni",
+  palette          = "default_jama",
+  package          = "ggsci",
+  plotgrid.args    = list(nrow = 1),
+  annotation.args  = list(title = "Differences in movie length by mpaa ratings for different genres")
+)
+```
+
+```{r}
+set.seed(123)
+library(WRS2) ## for data
+library(afex) ## to run ANOVA
+
+ggwithinstats(
+  data    = WineTasting,
+  x       = Wine,
+  y       = Taste,
+  title   = "Wine tasting"
+)
+```
+
+```{r}
+set.seed(123)
+
+grouped_ggwithinstats(
+  data            = dplyr::filter(bugs_long, region %in% c("Europe", "North America"), condition %in% c("LDLF", "LDHF")),
+  x               = condition,
+  y               = desire,
+  type            = "np",
+  xlab            = "Condition",
+  ylab            = "Desire to kill an artrhopod",
+  grouping.var    = region
+)
+```
+
+```{r}
+set.seed(123)
+
+gghistostats(
+  data       = ggplot2::msleep,
+  x          = awake,
+  title      = "Amount of time spent awake",
+  test.value = 12,
+  binwidth   = 1
+)
+```
+
+```{r}
+set.seed(123)
+
+grouped_gghistostats(
+  data              = dplyr::filter(movies_long, genre %in% c("Action", "Comedy")),
+  x                 = budget,
+  test.value        = 50,
+  type              = "nonparametric",
+  xlab              = "Movies budget (in million US$)",
+  grouping.var      = genre,
+  normal.curve      = TRUE,
+  normal.curve.args = list(color = "red", size = 1),
+  ggtheme           = ggthemes::theme_tufte(),
+  ## modify the defaults from `{ggstatsplot}` for each plot
+  plotgrid.args     = list(nrow = 1),
+  annotation.args   = list(title = "Movies budgets for different genres")
+)
+```
+
+**continued**
+
+[learn more](https://indrajeetpatil.github.io/ggstatsplot/)

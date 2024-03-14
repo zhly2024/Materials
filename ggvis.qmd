@@ -1,0 +1,98 @@
+---
+title: "ggvis"
+author: "zhly"
+date: "2024-01-02"
+categories: [r, code, visualization]
+format: html
+editor: visual
+---
+
+```{r,message=TRUE,warning=FALSE}
+library(ggvis)
+library(tidyverse)
+```
+
+```{r}
+mtcars %>% 
+  ggvis(~wt, ~mpg) %>% 
+  layer_points()
+```
+
+```{r}
+
+mtcars %>% 
+  ggvis(~wt, ~mpg) %>%
+  layer_points() %>%
+  layer_smooths()
+```
+
+```{r}
+mtcars %>% 
+  ggvis(~wt, ~mpg) %>%
+  layer_points() %>%
+  layer_model_predictions(model = "lm", se = TRUE)
+```
+
+```{r}
+mtcars %>% 
+  ggvis(~wt, ~mpg) %>% 
+  layer_points(fill = ~factor(cyl))
+```
+
+```{r}
+mtcars %>% 
+  ggvis(~wt, ~mpg, fill = ~factor(cyl)) %>% 
+  layer_points() %>% 
+  group_by(cyl) %>% 
+  layer_model_predictions(model = "lm")
+```
+
+```{r}
+head(pressure)
+
+pressure %>% 
+  ggvis(~temperature, ~pressure) %>%
+  layer_bars(fill := "#ff8080")
+```
+
+```{r}
+pressure %>% 
+  ggvis(~temperature, ~pressure) %>%
+  layer_bars(width = 15,fill := "#ff8080")
+```
+
+```{r}
+pressure %>% ggvis(~temperature, ~pressure) %>% layer_lines()
+```
+
+```{r}
+pressure %>% ggvis(~temperature, ~pressure) %>%
+  layer_points(size := 50) %>% 
+  layer_lines()
+```
+
+```{r}
+head(faithful)
+
+faithful %>% ggvis(~eruptions, fill := "#ff8080") %>%
+  layer_histograms(width=0.25, boundary=0) %>% 
+  add_axis("x", title = "month") %>%
+  add_axis("y", title = "count")
+```
+
+```{r}
+faithful %>% ggvis(~eruptions, fill := "#90bff9") %>%
+  layer_histograms(width=0.25, center=0) %>% 
+  add_axis("x", title = "month") %>%
+  add_axis("y", title = "count")
+```
+
+```{r}
+mtcars %>% 
+  ggvis(~factor(cyl), ~mpg) %>% 
+  layer_boxplots(fill := "#90bff9")
+```
+
+[learn more](https://ggvis.rstudio.com/)
+
+[learn more](http://ggvis.rstudio.com/cookbook.html)

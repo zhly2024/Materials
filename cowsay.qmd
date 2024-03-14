@@ -1,0 +1,135 @@
+---
+title: "cowsay"
+author: "zhly"
+date: "2024-01-02"
+categories: [r, package]
+format: html
+description: "interesting r package"
+editor: visual
+---
+
+```{r}
+library(cowsay)
+```
+
+```{r}
+sort(names(animals))
+```
+
+```{r}
+say('time')
+```
+
+```{r}
+say("ain't that some shit", "chicken")
+```
+
+```{r,message=FALSE}
+library(crayon)
+say("boo!", "ghost", 
+    what_color = "cyan", by_color = "saddlebrown")
+```
+
+```{r}
+say("I love hooo you are!", "owl", 
+    what_color = rgb(0, 1, 1), by_color = "#FF0000")
+```
+
+```{r}
+say(what = "rms", by = "rms", 
+        what_color = yellow$bgMagenta$bold,
+        by_color = cyan$italic)
+```
+
+```{r}
+say(what = paste0("hello ", crayon::yellow("there "), crayon::underline("world")), 
+    by = "trilobite", 
+    what_color = bgBlue$cyan$italic,
+    by_color = "thistle")  # Don't ask me why "thistle" is pink/purple
+```
+
+```{r}
+say("hell no!")
+say("hell no!", type="warning")
+say("hell no!", type="string")
+```
+
+```{r}
+say("catfact", "cat")
+```
+
+```{r}
+say("it's caturday", "cat")
+```
+
+```{r}
+say('NO!', by='cat')
+```
+
+```{r}
+say(by='cat')
+```
+
+```{r}
+say(by='cat')
+```
+
+```{r}
+say('fortune','cat')
+say(fortune=100)
+say(fortune='whatever')
+```
+
+```{r}
+say("Hi there :)", by='trilobite')
+```
+
+```{r}
+say('Q: What do you call a solitary shark\nA: A lone shark', by='shark')
+```
+
+```{r}
+say('Q: What do you call a single buffalo?\nA: A buffalonely', by='buffalo')
+```
+
+```{r}
+say(fortune=59, by="clippy")
+```
+
+```{r}
+say("fortune", by = "yoda")
+```
+
+```{r}
+say("hi, i'm a bat", by="bat")
+```
+
+```{r}
+say("fortune", by = "monkey")
+```
+
+```{r}
+say("fortune", by = "daemon")
+```
+
+```{r}
+say("je ne regrette rien", by = "egret")
+```
+
+```{r}
+#endless_horse()
+```
+
+```{r}
+library("magrittr")
+"I HAD FUN ONCE, IT WAS AWFUL" %>% say('cat')
+```
+
+```{r}
+animals['clippy']
+```
+```{r}
+say("rms")
+```
+
+[learn more](https://github.com/sckott/cowsay)

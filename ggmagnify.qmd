@@ -1,0 +1,36 @@
+---
+title: "ggmagnify"
+author: "zhly"
+date: "2024-01-02"
+---
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(jskm)
+library(ggmagnify)
+library(survival)
+```
+
+```{r}
+lung$sex <- factor(lung$sex, labels = c('Male', 'Female'))
+fit <- survfit(Surv(time,status) ~ sex, data = lung)
+p <- jskm(fit)
+p
+```
+
+```{r}
+# 指定图片放大区域位置
+target = c(700, 850, 0.05, 0.14);
+# 指定放大后图片放置位置
+insert = c(30, 350, 0.02, 0.3)
+
+p +
+  geom_magnify(from = target, to = insert)
+```
+
+```{r}
+p + 
+  geom_magnify(from = target, to = insert,
+               axes = TRUE)
+```

@@ -1,0 +1,104 @@
+---
+title: "ggflowchart"
+author: "zhly"
+date: "2024-01-02"
+categories: [r, code, visualization]
+format: html
+editor: visual
+---
+
+```{r}
+library(ggflowchart)
+library(tidyverse)
+library(magrittr)
+```
+
+```{r}
+data <- tibble::tibble(from = c("A", "A", "A", "B", "C", "F"),
+                       to = c("B", "C", "D", "E", "F", "G"))
+ggflowchart(data)
+```
+
+```{r}
+ggflowchart(data,
+  colour = "red",
+  text_colour = "red",
+  arrow_colour = "red",
+  family = "serif",
+  x_nudge = 0.25
+)
+```
+
+```{r}
+goldilocks <- tibble::tibble(
+  from = c(
+    "Goldilocks",
+    "Porridge", "Porridge", "Porridge",
+    "Just right",
+    "Chairs", "Chairs", "Chairs",
+    "Just right2",
+    "Beds", "Beds", "Beds",
+    "Just right3"
+  ),
+  to = c(
+    "Porridge",
+    "Too cold", "Too hot", "Just right",
+    "Chairs",
+    "Still too big", "Too big", "Just right2",
+    "Beds",
+    "Too soft", "Too hard", "Just right3",
+    "Bears!"
+  )
+)
+node_data <- tibble::tibble(name = c(
+  "Goldilocks", "Porridge", "Just right", "Chairs",
+  "Just right2", "Beds", "Just right3", "Too cold",
+  "Too hot", "Still too big", "Too big", "Too soft",
+  "Too hard", "Bears!"
+)) %>%
+  dplyr::mutate(label = gsub("\\d+$", "", name))
+ggflowchart(goldilocks, node_data)
+```
+
+```{r}
+node_data <- node_data %>%
+  dplyr::mutate(
+    type = c(
+      "Character", "Question", "Answer",
+      "Question", "Answer", "Question",
+      "Answer", "Answer", "Answer",
+      "Answer", "Answer", "Answer",
+      "Answer", "Character"
+    )
+  )
+ggflowchart(goldilocks, node_data, fill = type)
+```
+
+```{r}
+data <- tibble::tribble(
+  ~from, ~to,
+  "A", "B",
+  "B", "C"
+)
+node_data <- tibble::tribble(
+  ~name, ~x_nudge,
+  "A", 0.3,
+  "B", 0.4,
+  "C", 0.5
+)
+ggflowchart(data, node_data)
+node_data <- tibble::tribble(
+  ~name, ~type,
+  "A", "Yes",
+  "B", "Yes",
+  "C", "No"
+)
+ggflowchart(data, node_data, fill = type)
+ggflowchart(data, node_data, fill = type) +
+  ggplot2::scale_fill_brewer(palette = "Dark2")
+ggflowchart(data, node_data, fill = "lightblue")
+ggflowchart(data, node_data, text_colour = type) +
+  ggplot2::theme(legend.position = "none")
+```
+
+[learn more](https://nrennie.github.io/ggflowchart/)
