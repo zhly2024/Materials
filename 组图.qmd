@@ -10,4 +10,5 @@ editor: visual
 ```{r,message=FALSE}
 library(patchwork)
 library(cowplot)
+library(aplot)
 ```
