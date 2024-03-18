@@ -56,11 +56,12 @@ df <- tibble(
 )
 
 df %>% 
-  ggplot(aes(name,defect))+
+  ggplot(aes(name,defect)) +
   stat_pareto(point.color = "red",
               point.size = 3,
               line.color = "black",
               #size.line = 1,
               bars.fill = c("blue", "orange"),
-  )
+  ) + 
+ theme(axis.text.x = element_text(angle = 45, hjust = .5, vjust = .5))  #修改横轴文本标签
 
