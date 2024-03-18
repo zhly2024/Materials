@@ -41,6 +41,7 @@ pareto.chart(defect, xlab = "Categories",
              main = "Defects"
 )
 
+#以下方法更容易理解，推荐使用
 
 library(ggQC)
 library(tidyverse)
