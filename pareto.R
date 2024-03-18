@@ -3,6 +3,7 @@ library(qcc)
 defect <- c(27, 789, 9, 65, 12, 109, 30, 15, 45, 621)
 
 #案例一
+
 names(defect) <- c("Too noisy", "Overpriced", "Food not fresh", 
                    "Food is tasteless", "Unfriendly staff",
                    "Wait time", "Not clean", "Food is too salty", 
@@ -25,6 +26,7 @@ pareto.chart(defect, xlab = "Categories", # x-axis label
 )
 
 #案例二
+
 defect <- c(7000, 4000, 5200, 3000, 800)
 
 # x axis titles
@@ -39,4 +41,26 @@ pareto.chart(defect, xlab = "Categories",
              main = "Defects"
 )
 
+
+library(ggQC)
+library(tidyverse)
+
+#案例三
+
+df <- tibble(
+  defect = c(27, 789, 9, 65, 12, 109, 30, 15, 45, 621),
+  name = c("Too noisy", "Overpriced", "Food not fresh", 
+           "Food is tasteless", "Unfriendly staff",
+           "Wait time", "Not clean", "Food is too salty", 
+           "No atmosphere", "Small portions") 
+)
+
+df %>% 
+  ggplot(aes(name,defect))+
+  stat_pareto(point.color = "red",
+              point.size = 3,
+              line.color = "black",
+              #size.line = 1,
+              bars.fill = c("blue", "orange"),
+  )
 
