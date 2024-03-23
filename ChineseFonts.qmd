@@ -2,7 +2,7 @@
 title: "showtext"
 author: "zhly"
 date: "2024-01-02"
-categories: [r, code, visualization, 字体设置]
+#categories: [r, code, visualization, 字体设置]
 format: html
 editor: visual
 description: "Using Fonts More Easily in R Graphs"
@@ -52,7 +52,7 @@ p + theme(text = element_text(size = 30),
 
 ```
 
-# Ecample2
+# Example2
 
 ```{r}
 ## Loading Google fonts (https://fonts.google.com/)
