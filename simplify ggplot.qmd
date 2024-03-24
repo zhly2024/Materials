@@ -9,11 +9,7 @@ editor: visual
 ---
 
 ```{r}
-#library(esquisse)  #可视化形式绘制ggplot
-#library(ggThemeAssist)  #####可视化形式修改theme，包括标题、轴、标签、字体等
 #library(ggthemes)  #提供更丰富的theme
-#library(ggannotate)  #交互式添加注释
-#library(ggedit)  #交互式ggplot图形参数修改
 ```
 
 [esquisse](https://dreamrs.github.io/esquisse/)
